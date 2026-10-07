@@ -14,6 +14,7 @@ instance_id=$(aws ec2 run-instances \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
     --query 'Instances[0].InstanceId' \
     --output text)
+ 
   if [ $instance == "frontend" ]; then
     IP=$(
     aws ec2 describe-instances \
@@ -21,6 +22,7 @@ instance_id=$(aws ec2 run-instances \
   --query "Reservations[0].Instances[0].PublicIpAddress" \
   --output text
     )
+    Domain=$Domain_Name
   
   else 
     IP=$(
@@ -29,6 +31,7 @@ instance_id=$(aws ec2 run-instances \
   --query "Reservations[0].Instances[0].PrivateIpAddress" \
   --output text
     )
+    Domain=$instance.$Domain_Name
   fi
   echo "IP Adress : $IP"
 
@@ -41,7 +44,7 @@ instance_id=$(aws ec2 run-instances \
           {
             "Action": "UPSERT",
             "ResourceRecordSet": {
-              "Name": "'$Domain_Name'",
+              "Name": "'$Domain'",
               "Type": "A",
               "TTL": 1,
               "ResourceRecords": [
