@@ -3,6 +3,7 @@
 USER=$(id -u)
 LOG_DIR=/var/log/Shell-roboshop
 LOG_File=$LOG_DIR/$0.log
+DIR=$PWD
 
 R="\e[31m"
 G="\e[32m"
@@ -46,6 +47,7 @@ unzip /tmp/frontend.zip &>>$LOG_File
 VALIDATE $? "unzipping frontend"
 
 rm -rf /etc/nginx/nginx.conf
+VALIDATE $? "removing conf file"
 
 cp $DIR/nginx.conf /etc/nginx/nginx.conf 
 VALIDATE $? "copying conf file"
