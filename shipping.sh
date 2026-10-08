@@ -64,7 +64,7 @@ VALIDATE $? "creting systemctl service"
 systemctl daemon-reload &>>$LOG_File
 
 
-dnf install mysql -y 
+dnf install mysql -y &>>$LOG_File
 VALIDATE $? "Installing mysql"
 
 
