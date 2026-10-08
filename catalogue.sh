@@ -38,7 +38,7 @@ if (($? != 0));then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
     VALIDATE $? "creating user"
 else
-   echo -e "create User ...$YSkipping$N"
+   echo -e "create User ...$Y Skipping $N"
 fi
 
 mkdir -p /app 
@@ -70,9 +70,9 @@ dnf install mongodb-mongosh -y &>> $LOG_File
 VALIDATE $? "Installing mongodb"
 
 
-INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")') &>> $LOG_File
 if (( $INDEX <= 0 ));then
-  mongosh --host mongodb.rivare.online </app/db/master-data.js
+  mongosh --host mongodb.rivare.online </app/db/master-data.js &>> $LOG_File
 else 
   echo -e "Repository already exists "
 fi
