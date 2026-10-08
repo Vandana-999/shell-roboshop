@@ -3,6 +3,8 @@ USER=$(id -u)
 LOG_DIR=/var/log/Shell-roboshop
 LOG_File=$LOG_DIR/$0.log
 DIR=$PWD
+MONGODB_HOST=mongodb.rivare.online
+
 
 R="\e[31m"
 G="\e[32m"
