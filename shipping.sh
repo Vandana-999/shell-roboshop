@@ -50,7 +50,7 @@ cd /app
 rm -rf /app/*
 VALIDATE $? "Removing existing code"
 
-unzip /tmp/shipping.zip &>>$LOGS_FILE
+unzip /tmp/shipping.zip &>>$LOG_File
 VALIDATE $? "Uzip shipping code"
 
 mvn clean package 
