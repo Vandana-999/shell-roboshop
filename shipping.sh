@@ -4,6 +4,7 @@ USER=$(id -u)
 LOG_DIR=/var/log/Shell-roboshop
 LOG_File=$LOG_DIR/$0.log
 DIR=$PWD
+MYSQL_HOST=mysql.rivare.online
 
 R="\e[31m"
 G="\e[32m"
@@ -53,7 +54,7 @@ VALIDATE $? "Removing existing code"
 unzip /tmp/shipping.zip &>>$LOG_File
 VALIDATE $? "Uzip shipping code"
 
-mvn clean package 
+mvn clean package &>>$LOG_File
 mv target/shipping-1.0.jar shipping.jar 
 VALIDATE $? "renaming jar file "
 
@@ -61,7 +62,7 @@ cp $DIR/shipping.service /etc/systemd/system/shipping.service
 VALIDATE $? "creting systemctl service"
 
 systemctl daemon-reload &>>$LOG_File
-s
+
 
 dnf install mysql -y 
 VALIDATE $? "Installing mysql"
@@ -70,15 +71,15 @@ VALIDATE $? "Installing mysql"
 mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities'
 if [ $? -ne 0 ]; then
 
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOGS_FILE
-    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_File
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_File
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_File
     VALIDATE $? "Loaded data into MySQL"
 else
     echo -e "data is already loaded ... $Y SKIPPING $N"
 fi
 
 
-ystemctl enable shipping &>>$LOG_File
+systemctl enable shipping &>>$LOG_File
 systemctl start shipping
 VALIDATE $? "Enabling and Starting shipping"
